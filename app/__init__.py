@@ -32,8 +32,8 @@ def create_app(test_config=None):
     from . import database
     database.init_app(app)
 
-    from .controllers import auth
-    app.register_blueprint(auth.bp)
+    from .controllers import auth_controller
+    app.register_blueprint(auth_controller.bp)
 
     from .controllers import blog
     app.register_blueprint(blog.bp)
