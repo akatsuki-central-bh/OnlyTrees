@@ -46,8 +46,8 @@ def login():
 
     return render_template('auth/login.html')
 
-@bp.route('/logout')
-def logout():
+@bp.route('/logout', methods=['DELETE'])
+def delete():
     session.clear()
     return redirect(url_for('index'))
 
@@ -58,9 +58,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = User.find(user_id)
 
 def login_required(view):
     @functools.wraps(view)

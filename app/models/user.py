@@ -19,8 +19,18 @@ class User():
 
         return wrapper
 
-    def find(self, id):
-        pass
+    @classmethod
+    def find(cls, id):
+        user_data = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (id,)
+        ).fetchone()
+
+        return User(
+            id=user_data['id'],
+            username=user_data['username'],
+            password=user_data['password'],
+            role=user_data['role']
+        )
 
     @classmethod
     @params_is_valid
