@@ -29,7 +29,7 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    from . import database
+    from .database import database
     database.init_app(app)
 
     from .controllers import auth_controller

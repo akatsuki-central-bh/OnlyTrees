@@ -1,4 +1,4 @@
-from app.database import get_db
+from app.database.database import get_db
 from werkzeug.security import check_password_hash, generate_password_hash
 class User():
     def __init__(self, username, password, role, id = None):
