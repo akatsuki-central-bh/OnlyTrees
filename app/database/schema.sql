@@ -8,7 +8,7 @@ CREATE TABLE users (
   role INTEGER NOT NULL
 );
 
-CREATE TABLE content (
+CREATE TABLE contents (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   access_level INTEGER NOT NULL,
   content TEXT NOT NULL

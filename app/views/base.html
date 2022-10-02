@@ -8,7 +8,7 @@
       <li><span>{{ g.user['username'] }}</span>
       <li><a href="{{ url_for('auth.delete_session') }}">Log Out</a>
     {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
+      <li><a href="{{ url_for('auth.new_register') }}">Register</a>
       <li><a href="{{ url_for('auth.new_session') }}">Log In</a>
     {% endif %}
   </ul>

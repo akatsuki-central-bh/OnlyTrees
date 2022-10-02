@@ -17,10 +17,12 @@ def new_register():
 
 @bp.route('/register', methods=['POST'])
 def create_register():
+    fingerprint = request.files['file']
+
     username = request.form['username']
     password = request.form['password']
 
-    user = User.create(username, password, 1)
+    user = User.create(username, password, 1, fingerprint)
 
     if not user:
         flash('usuário já cadastrado')
