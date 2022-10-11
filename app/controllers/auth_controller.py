@@ -4,6 +4,7 @@ import os
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from app.models.fingerprint import FingerPrint
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -39,8 +40,14 @@ def new_session():
 def create_session():
     username = request.form['username']
     password = request.form['password']
+    fingerprint = request.files['file']
 
-    user = User.login(username, password)
+    user = None
+
+    if fingerprint is None:
+        user = User.login(username, password)
+    else:
+        user = login_with_fingerprint(fingerprint)
 
     if not user:
         flash('login inválido')
@@ -49,6 +56,19 @@ def create_session():
     session.clear()
     session['user_id'] = user.id
     return redirect(url_for('index'))
+
+def login_with_fingerprint(fingerprint):
+    filename = fingerprint.filename
+    fingerprint.save(f'app/temp/{filename}')
+
+    command = FingerPrint(f'app/temp/{filename}')
+    id_user = command.call()
+
+    flash(f'best_score: {command.best_score}, image: {command.filename}')
+
+    os.remove(f'app/temp/{filename}')
+
+    return User.find(id_user)
 
 @bp.route('/logout')
 def delete_session():

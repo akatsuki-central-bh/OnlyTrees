@@ -1,5 +1,7 @@
 import os
+import glob
 import cv2
+import re
 
 class FingerPrint():
     def __init__(self, file):
@@ -14,9 +16,10 @@ class FingerPrint():
         self.match_points = None
 
     def call(self):
-        file_names = os.listdir('SOCOFing/Real')
+        file_names = glob.glob('app/database/images/user/fingerprints/*.BMP')
+
         for filename in file_names:
-            fingerprint_image = cv2.imread(f'SOCOFing/Real/{filename}')
+            fingerprint_image = cv2.imread(filename)
             sift = cv2.SIFT_create()
 
             keypoints_1, descriptors_1 = sift.detectAndCompute(self.input_image, None)
@@ -46,3 +49,5 @@ class FingerPrint():
                 self.keypoints_1 = keypoints_1
                 self.keypoints_2 = keypoints_2
                 self.match_points = match_points
+
+        return re.findall('\d+', self.filename)[-1]
