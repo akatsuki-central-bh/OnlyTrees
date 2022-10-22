@@ -12,6 +12,16 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), 'upload')
 
 from app.models.user import User
 
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.new_session'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
 @bp.route('/register', methods=['GET'])
 def new_register():
     return render_template('auth/register.html')
@@ -31,6 +41,33 @@ def create_register():
 
     flash('usuário criado com sucesso')
     return redirect(url_for("auth.new_session"))
+
+@bp.route('/edit', methods=['GET'])
+@login_required
+def edit_user():
+    return render_template('auth/edit.html')
+
+@bp.route('/register', methods=['PATCH'])
+def update_user():
+    fingerprint = request.files['file']
+
+    id = session.get('user_id')
+    username = request.form['username']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+    role = request.form['role']
+
+    if password != confirm_password:
+        flash('senhas não coincidem')
+        return render_template('auth/edit.html')
+
+    user = User.update(id, username, password, role, fingerprint)
+
+    if not user:
+        flash('Alteração inválida')
+        return render_template('auth/edit.html')
+
+    return redirect(url_for('index'))
 
 @bp.route('/login', methods=['GET'])
 def new_session():
@@ -83,13 +120,3 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.find(user_id)
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.new_session'))
-
-        return view(**kwargs)
-
-    return wrapped_view
