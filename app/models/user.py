@@ -67,9 +67,20 @@ class User():
         except:
             return False
 
+    @classmethod
     @params_is_valid
-    def update(self, username, password, role):
-        pass
+    def update(cls, id, username, password, role, fingerprint):
+        db = get_db()
+        db.execute(
+            'UPDATE users set username = ?, password = ?, role = ? WHERE id = ?',
+            (username, password, role, id,)
+        )
+
+        fingerprint.save(
+            os.path.join('app/database/images/user/fingerprints/',
+            f"{id}.BMP"))
+
+        db.commit()
 
     def destroy():
         pass
