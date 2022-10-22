@@ -1,5 +1,6 @@
 /SOCOFing/*
 venv/
+*.BMP
 
 *.pyc
 __pycache__/
