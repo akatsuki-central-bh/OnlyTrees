@@ -47,26 +47,32 @@ def create_register():
 def edit_user():
     return render_template('auth/edit.html')
 
-@bp.route('/register', methods=['PATCH'])
+@bp.route('/edit', methods=['POST'])
 def update_user():
     fingerprint = request.files['file']
 
-    id = session.get('user_id')
-    username = request.form['username']
-    password = request.form['password']
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
     confirm_password = request.form['confirm_password']
-    role = request.form['role']
 
-    if password != confirm_password:
+    if not g.user.compare_password(current_password):
+        flash('senha informada não coincide com atual')
+        return render_template('auth/edit.html')
+
+    # role = request.form['role']
+    role = 1
+
+    if new_password != confirm_password:
         flash('senhas não coincidem')
         return render_template('auth/edit.html')
 
-    user = User.update(id, username, password, role, fingerprint)
+    user = g.user.update(new_password, role, fingerprint)
 
     if not user:
         flash('Alteração inválida')
         return render_template('auth/edit.html')
 
+    flash('Alterado com sucesso')
     return redirect(url_for('index'))
 
 @bp.route('/login', methods=['GET'])
@@ -81,7 +87,7 @@ def create_session():
 
     user = None
 
-    if fingerprint is None:
+    if not request.files.get('file', None):
         user = User.login(username, password)
     else:
         user = login_with_fingerprint(fingerprint)

@@ -44,7 +44,6 @@ class User():
         password = generate_password_hash(password)
 
         try:
-            breakpoint()
             cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, password, role,))
 
             db.commit()
@@ -64,20 +63,28 @@ class User():
         except:
             return False
 
-    @classmethod
-    @params_is_valid
-    def update(cls, id, username, password, role, fingerprint):
+    # @params_is_valid
+    def update(self, password, role, fingerprint):
         db = get_db()
-        db.execute(
-            'UPDATE users set username = ?, password = ?, role = ? WHERE id = ?',
-            (username, password, role, id,)
-        )
 
-        fingerprint.save(
-            os.path.join('app/database/images/user/fingerprints/',
-            f"{id}.BMP"))
+        try:
+            db.execute(
+                'UPDATE users set password = ?, role = ? WHERE id = ?',
+                (password, role, self.id)
+            )
 
-        db.commit()
+            fingerprint.save(
+                os.path.join('app/database/images/user/fingerprints/',
+                f"{id}.BMP"))
+
+            db.commit()
+
+            self.password = generate_password_hash(password)
+            self.role = role
+
+            return self
+        except:
+            return False
 
     def destroy():
         pass
@@ -108,3 +115,6 @@ class User():
             'SELECT * FROM users limit 1').fetchone()
 
         return not user_data is None
+
+    def compare_password(self, password):
+        return check_password_hash(self.password, password)
