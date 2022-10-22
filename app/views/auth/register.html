@@ -1,16 +1,46 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post" enctype="multipart/form-data">
-    <label for="username">Username</label>
-    <input type="email" name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type = "file" name = "file" />
-    <input type="submit" value="Register">
-  </form>
+
+<form action="" method="post">
+  <div class="row justify-content-center align-items-center vh-100">
+    <div class="col-6">
+      <div class="row">
+        <div class="col-12">
+          <label for="" class="form-label">E-mail</label>
+          <input type="email" name="username" id="username" class="form-control">
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-6">
+          <label for="" class="form-label">Senha</label>
+          <input type="password" name="password" id="password" class="form-control">
+        </div>
+
+        <div class="col-6">
+          <label for="" class="form-label">Confirmar Senha</label>
+          <input type="password" name="conf_password" id="conf_password" class="form-control">
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12">
+          <label for="" class="form-label">Digital</label>
+          <input type="file" name="file" id="file" class="form-control">
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-6">
+          <button type="submit" class="btn btn-primary w-100">Registrar</button>
+        </div>
+        <div class="col-6">
+          <a href="{{ url_for('auth.new_session') }}" class="btn btn-primary w-100">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
 {% endblock %}
