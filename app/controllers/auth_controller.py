@@ -47,27 +47,26 @@ def create_register():
 def edit_user():
     return render_template('auth/edit.html')
 
-@bp.route('/register', methods=['PATCH'])
+@bp.route('/edit', methods=['POST'])
 def update_user():
     fingerprint = request.files['file']
 
-    user = User.find(g.user)
-
-    id = session.get('user_id')
-    username = request.form['username']
     current_password = request.form['current_password']
     new_password = request.form['new_password']
     confirm_password = request.form['confirm_password']
 
-    user = User.compare_password(current_password)
+    if not g.user.compare_password(current_password):
+        flash('senha informada não coincide com atual')
+        return render_template('auth/edit.html')
 
-    role = request.form['role']
+    # role = request.form['role']
+    role = 1
 
-    if current_password != confirm_password:
+    if new_password != confirm_password:
         flash('senhas não coincidem')
         return render_template('auth/edit.html')
 
-    user = User.update(id, username, new_password, role, fingerprint)
+    user = g.user.update(new_password, role, fingerprint)
 
     if not user:
         flash('Alteração inválida')
