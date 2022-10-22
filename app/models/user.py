@@ -23,9 +23,7 @@ class User():
 
     @classmethod
     def find(cls, id):
-        user_data = get_db().execute(
-            'SELECT * FROM users WHERE id = ?', (id,)
-        ).fetchone()
+        user_data = get_db().execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
 
         if user_data is None:
             return False
@@ -46,16 +44,15 @@ class User():
         password = generate_password_hash(password)
 
         try:
-            cursor.execute(
-                "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-                (username, password, role),
-            )
+            breakpoint()
+            cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, password, role,))
 
             db.commit()
 
-            fingerprint.save(
-                os.path.join('app/database/images/user/fingerprints/',
-                f"{cursor.lastrowid}.BMP"))
+            if not fingerprint is None:
+                fingerprint.save(
+                    os.path.join('app/database/images/user/fingerprints/',
+                    f"{cursor.lastrowid}.BMP"))
 
             return User(
                 id = cursor.lastrowid,
@@ -67,9 +64,20 @@ class User():
         except:
             return False
 
+    @classmethod
     @params_is_valid
-    def update(self, username, password, role):
-        pass
+    def update(cls, id, username, password, role, fingerprint):
+        db = get_db()
+        db.execute(
+            'UPDATE users set username = ?, password = ?, role = ? WHERE id = ?',
+            (username, password, role, id,)
+        )
+
+        fingerprint.save(
+            os.path.join('app/database/images/user/fingerprints/',
+            f"{id}.BMP"))
+
+        db.commit()
 
     def destroy():
         pass
