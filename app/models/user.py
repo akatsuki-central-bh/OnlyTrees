@@ -23,9 +23,7 @@ class User():
 
     @classmethod
     def find(cls, id):
-        user_data = get_db().execute(
-            'SELECT * FROM users WHERE id = ?', (id,)
-        ).fetchone()
+        user_data = get_db().execute('SELECT * FROM users WHERE id = ?', (id,)).fetchone()
 
         if user_data is None:
             return False
@@ -46,16 +44,15 @@ class User():
         password = generate_password_hash(password)
 
         try:
-            cursor.execute(
-                "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-                (username, password, role),
-            )
+            breakpoint()
+            cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, password, role,))
 
             db.commit()
 
-            fingerprint.save(
-                os.path.join('app/database/images/user/fingerprints/',
-                f"{cursor.lastrowid}.BMP"))
+            if not fingerprint is None:
+                fingerprint.save(
+                    os.path.join('app/database/images/user/fingerprints/',
+                    f"{cursor.lastrowid}.BMP"))
 
             return User(
                 id = cursor.lastrowid,
