@@ -12,6 +12,16 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), 'upload')
 
 from app.models.user import User
 
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.new_session'))
+
+        return view(**kwargs)
+
+    return wrapped_view
+
 @bp.route('/register', methods=['GET'])
 def new_register():
     return render_template('auth/register.html')
@@ -117,13 +127,3 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.find(user_id)
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.new_session'))
-
-        return view(**kwargs)
-
-    return wrapped_view
