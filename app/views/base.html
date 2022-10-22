@@ -12,27 +12,22 @@
 
 <body>
 
-  <nav>
-    <h1>Flask</h1>
-    <ul>
-      {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.delete_session') }}">Log Out</a>
-        {% else %}
-      <li><a href="{{ url_for('auth.new_register') }}">Register</a>
-      <li><a href="{{ url_for('auth.new_session') }}">Log In</a>
-        {% endif %}
-    </ul>
-  </nav>
-
-  <section class="content">
-    <header>
-      {% block header %}{% endblock %}
-    </header>
+  <section class="container">
+    <div class="row justify-content-center">
+      <div class="col-7 align-content-center">
+        <header>
+          {% block header %}{% endblock %}
+        </header>
+      </div>
+    </div>
     {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
     {% endfor %}
-    {% block content %}{% endblock %}
+    <div class="row">
+      <div class="col-12">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
   </section>
 
   <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
