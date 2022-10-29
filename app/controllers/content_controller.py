@@ -19,10 +19,10 @@ def index():
     # ).fetchall()
     return render_template('content/index.html')
 
-@bp.route('/new', methods=['GET'])
+@bp.route('/create', methods=['GET'])
 @login_required
 def new():
-    return render_template('content/new.html')
+    return render_template('content/create.html')
 
 @bp.route('/create', methods=['POST'])
 @login_required
@@ -34,7 +34,7 @@ def create():
     content = Content.create(title, body, access_level)
     if not content:
         flash('Falha ao tentar publicar conteúdo')
-        return render_template('content/new.html')
+        return render_template('content/create.html')
 
     return redirect(url_for('content.index'))
 

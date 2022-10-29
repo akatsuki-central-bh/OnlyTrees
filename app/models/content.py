@@ -10,9 +10,9 @@ class Content():
     @classmethod
     def find(cls, id):
         content_data = get_db().execute(
-            'SELECT p.id, title, body'
-            ' FROM post p JOIN user u ON p.author_id = u.id'
-            ' WHERE p.id = ?',
+            'SELECT id, title, body'
+            ' FROM contents JOIN user u ON p.author_id = u.id'
+            ' WHERE id = ?',
             (id,)
         ).fetchone()
 
@@ -33,8 +33,8 @@ class Content():
 
         try:
             cursor.execute(
-                "INSERT INTO content (title, body, access_level) VALUES (?, ?, ?)",
-                (title, body,)
+                "INSERT INTO contents (title, body, access_level) VALUES (?, ?, ?)",
+                (title, body, access_level)
             )
 
             db.commit()
@@ -54,7 +54,7 @@ class Content():
         try:
             db = get_db()
             db.execute(
-                'UPDATE content SET title = ?, body = ?, access_level = ?'
+                'UPDATE contents SET title = ?, body = ?, access_level = ?'
                 ' WHERE id = ?',
                 (title, body, access_level, self.id)
             )
@@ -71,7 +71,7 @@ class Content():
         try:
             db = get_db()
             db.execute(
-                'DELETE content WHERE id = ?', (self.id,)
+                'DELETE contents WHERE id = ?', (self.id,)
             )
 
             return True
