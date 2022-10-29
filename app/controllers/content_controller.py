@@ -18,28 +18,32 @@ def index():
     # ).fetchall()
     return render_template('blog/index.html')
 
-@bp.route('/create', methods=('GET', 'POST'))
+@bp.route('/new', methods='GET')
+@login_required
+def new():
+    return render_template('blog/new.html')
+
+@bp.route('/create', methods='POST')
 @login_required
 def create():
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-        error = None
+    title = request.form['title']
+    body = request.form['body']
+    error = None
 
-        if not title:
-            error = 'Title is required.'
+    if not title:
+        error = 'Title is required.'
 
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+    if error is not None:
+        flash(error)
+    else:
+        db = get_db()
+        db.execute(
+            'INSERT INTO post (title, body, author_id)'
+            ' VALUES (?, ?, ?)',
+            (title, body, g.user['id'])
+        )
+        db.commit()
+        return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
 
