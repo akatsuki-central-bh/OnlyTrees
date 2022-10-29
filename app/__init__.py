@@ -38,8 +38,8 @@ def create_app(test_config=None):
     from .controllers import admin_controller
     app.register_blueprint(admin_controller.bp)
 
-    from .controllers import blog
-    app.register_blueprint(blog.bp)
+    from .controllers import content_controller
+    app.register_blueprint(content_controller.bp)
 
     app.add_url_rule('/', endpoint='index')
 
