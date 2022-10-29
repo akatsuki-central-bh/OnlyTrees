@@ -17,12 +17,12 @@ def index():
     #     ' FROM post p JOIN user u ON p.author_id = u.id'
     #     ' ORDER BY created DESC'
     # ).fetchall()
-    return render_template('blog/index.html')
+    return render_template('content/index.html')
 
 @bp.route('/new', methods=['GET'])
 @login_required
 def new():
-    return render_template('blog/new.html')
+    return render_template('content/new.html')
 
 @bp.route('/create', methods=['POST'])
 @login_required
@@ -36,13 +36,13 @@ def create():
         flash('Falha ao tentar publicar conteúdo')
         return render_template('content/new.html')
 
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('content.index'))
 
 
 @bp.route('/<int:id>/edit', methods=['GET'])
 def edit(id):
     content = Content.find(id)
-    return render_template('blog/update.html', content=content)
+    return render_template('content/update.html', content=content)
 
 @bp.route('/<int:id>/update', methods=['POST'])
 @login_required
@@ -62,7 +62,7 @@ def update(id):
         content = Content.find(id)
         content.update(title, body, access_level)
 
-        return redirect(url_for('blog.index'))
+        return redirect(url_for('content.index'))
 
 
 @bp.route('/<int:id>/delete', methods=['POST'])
@@ -72,6 +72,6 @@ def delete(id):
 
     if not content:
         flash('Alteração inválida')
-        return redirect(url_for('blog.index'))
+        return redirect(url_for('content.index'))
 
     content.destroy()
