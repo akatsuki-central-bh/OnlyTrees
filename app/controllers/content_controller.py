@@ -19,12 +19,12 @@ def index():
     # ).fetchall()
     return render_template('blog/index.html')
 
-@bp.route('/new', methods='GET')
+@bp.route('/new', methods=['GET'])
 @login_required
 def new():
     return render_template('blog/new.html')
 
-@bp.route('/create', methods='POST')
+@bp.route('/create', methods=['POST'])
 @login_required
 def create():
     title = request.form['title']
@@ -46,12 +46,12 @@ def create():
         db.commit()
         return redirect(url_for('blog.index'))
 
-@bp.route('/<int:id>/edit', methods='GET')
+@bp.route('/<int:id>/edit', methods=['GET'])
 def edit(id):
     content = Content.find(id)
     return render_template('blog/update.html', content=content)
 
-@bp.route('/<int:id>/update', methods='POST')
+@bp.route('/<int:id>/update', methods=['POST'])
 @login_required
 def update(id):
     title = request.form['title']
@@ -64,21 +64,19 @@ def update(id):
     if error is not None:
         flash(error)
     else:
-        db = get_db()
-        db.execute(
-            'UPDATE post SET title = ?, body = ?'
-            ' WHERE id = ?',
-            (title, body, id)
-        )
-        db.commit()
+        content = Content.find(id)
+        content.update(title, body)
+
         return redirect(url_for('blog.index'))
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
-    get_post(id)
-    db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
-    db.commit()
-    return redirect(url_for('blog.index'))
+    content = Content.find(id)
+
+    if not content:
+        flash('Alteração inválida')
+        return redirect(url_for('blog.index'))
+
+    content.destroy()
