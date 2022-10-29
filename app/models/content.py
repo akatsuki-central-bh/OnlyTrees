@@ -19,7 +19,55 @@ class Content():
             return False
 
         return Content(
-            id=content_data['id'],
-            title=content_data['title'],
-            body=content_data['body']
+            id = content_data['id'],
+            title = content_data['title'],
+            body = content_data['body']
         )
+
+    @classmethod
+    def create(cls, title, body):
+        db = get_db()
+        cursor = db.cursor()
+
+        try:
+            cursor.execute("INSERT INTO content (title, body) VALUES (?, ?)",
+            (title, body,))
+
+            db.commit()
+
+            return Content(
+                id = cursor.lastrowid,
+                title = title,
+                body = body
+            )
+
+        except:
+            return False
+
+
+    def update(self, title, body):
+        try:
+            db = get_db()
+            db.execute(
+                'UPDATE content SET title = ?, body = ?'
+                ' WHERE id = ?',
+                (title, body, self.id)
+            )
+
+            self.title = title
+            self.body = body
+
+            return self
+        except:
+            return False
+
+    def destroy(self):
+        try:
+            db = get_db()
+            db.execute(
+                'DELETE content WHERE id = ?', (self.id,)
+            )
+
+            return True
+        except:
+            return False
