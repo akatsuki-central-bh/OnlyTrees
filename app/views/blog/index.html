@@ -3,8 +3,8 @@
 {% block header %}
   <h1>{% block title %}Posts{% endblock %}</h1>
   {% if g.user %}
-    Usuário logado: {{ g.user }}
+    Usuário logado: {{ g.user.username }}
   {% else %}
-    Usuário inválido: {{ g.user }}
+    Usuário inválido: {{ g.user.username }}
   {% endif %}
 {% endblock %}
