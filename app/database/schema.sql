@@ -11,5 +11,6 @@ CREATE TABLE users (
 CREATE TABLE contents (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   access_level INTEGER NOT NULL,
-  content TEXT NOT NULL
+  title TEXT NOT NULL,
+  body TEXT NOT NULL,
 );

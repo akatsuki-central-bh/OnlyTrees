@@ -7,7 +7,7 @@ from .auth_controller import login_required
 from app.database.database import get_db
 from app.models.content import Content
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('content', __name__)
 
 @bp.route('/')
 def index():
@@ -29,22 +29,15 @@ def new():
 def create():
     title = request.form['title']
     body = request.form['body']
-    error = None
+    access_level = request.form['access_level']
 
-    if not title:
-        error = 'Title is required.'
+    content = Content.create(title, body, access_level)
+    if not content:
+        flash('Falha ao tentar publicar conteúdo')
+        return render_template('content/new.html')
 
-    if error is not None:
-        flash(error)
-    else:
-        db = get_db()
-        db.execute(
-            'INSERT INTO post (title, body, author_id)'
-            ' VALUES (?, ?, ?)',
-            (title, body, g.user['id'])
-        )
-        db.commit()
-        return redirect(url_for('blog.index'))
+    return redirect(url_for('blog.index'))
+
 
 @bp.route('/<int:id>/edit', methods=['GET'])
 def edit(id):
@@ -56,6 +49,8 @@ def edit(id):
 def update(id):
     title = request.form['title']
     body = request.form['body']
+    access_level = request.form['access_level']
+
     error = None
 
     if not title:
@@ -65,7 +60,7 @@ def update(id):
         flash(error)
     else:
         content = Content.find(id)
-        content.update(title, body)
+        content.update(title, body, access_level)
 
         return redirect(url_for('blog.index'))
 

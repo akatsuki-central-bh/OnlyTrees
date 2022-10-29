@@ -1,10 +1,11 @@
 from app.database.database import get_db
 
 class Content():
-    def __init__(self, id, title, body):
+    def __init__(self, id, title, body, access_level):
         self.id = id
         self.title = title
         self.body = body
+        self.access_level = access_level
 
     @classmethod
     def find(cls, id):
@@ -21,41 +22,46 @@ class Content():
         return Content(
             id = content_data['id'],
             title = content_data['title'],
-            body = content_data['body']
+            body = content_data['body'],
+            access_level = content_data['access_level']
         )
 
     @classmethod
-    def create(cls, title, body):
+    def create(cls, title, body, access_level):
         db = get_db()
         cursor = db.cursor()
 
         try:
-            cursor.execute("INSERT INTO content (title, body) VALUES (?, ?)",
-            (title, body,))
+            cursor.execute(
+                "INSERT INTO content (title, body, access_level) VALUES (?, ?, ?)",
+                (title, body,)
+            )
 
             db.commit()
 
             return Content(
                 id = cursor.lastrowid,
                 title = title,
-                body = body
+                body = body,
+                access_level = access_level
             )
 
         except:
             return False
 
 
-    def update(self, title, body):
+    def update(self, title, body, access_level):
         try:
             db = get_db()
             db.execute(
-                'UPDATE content SET title = ?, body = ?'
+                'UPDATE content SET title = ?, body = ?, access_level = ?'
                 ' WHERE id = ?',
-                (title, body, self.id)
+                (title, body, access_level, self.id)
             )
 
             self.title = title
             self.body = body
+            self.access_level = access_level
 
             return self
         except:
