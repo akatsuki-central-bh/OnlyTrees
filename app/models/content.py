@@ -8,6 +8,20 @@ class Content():
         self.access_level = access_level
 
     @classmethod
+    def all(cls):
+        db = get_db()
+
+        contents = db.execute('SELECT * FROM contents').fetchall()
+
+        return map(lambda result: Content(
+            id=result['id'],
+            title=result['title'],
+            body=result['body'],
+            access_level=result['access_level']
+        ), contents)
+
+
+    @classmethod
     def find(cls, id):
         content_data = get_db().execute(
             'SELECT id, title, body'
