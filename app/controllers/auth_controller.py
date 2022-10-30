@@ -60,14 +60,11 @@ def update_user():
         flash('senha informada não coincide com atual')
         return render_template('auth/edit.html')
 
-    # role = request.form['role']
-    role = 1
-
     if new_password != confirm_password:
         flash('senhas não coincidem')
         return render_template('auth/edit.html')
 
-    user = g.user.update(new_password, role, fingerprint)
+    user = g.user.update(new_password, 1, fingerprint)
 
     if not user:
         flash('Alteração inválida')

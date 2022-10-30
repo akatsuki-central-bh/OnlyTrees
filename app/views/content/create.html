@@ -10,6 +10,15 @@
     <input name="title" id="title" value="{{ request.form['title'] }}" required>
     <label for="body">Body</label>
     <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+
+    <label for="access_level">Nível de acesso</label>
+    <select name="access_level" id="access_level">
+      <option value="0">Administrador</option>
+      <option value="1">Público</option>
+      <option value="2">Diretores de divisões</option>
+      <option value="3">Ministro do meio ambiente</option>
+    </select>
+
     <input type="submit" value="Save">
   </form>
 {% endblock %}
