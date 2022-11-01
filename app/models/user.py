@@ -37,6 +37,19 @@ class User():
         )
 
     @classmethod
+    def all(cls):
+        db = get_db()
+
+        users = db.execute('SELECT * FROM users').fetchall()
+
+        return map(lambda result: User(
+            id=result['id'],
+            username=result['username'],
+            password=result['password'],
+            role=result['role']
+        ), users)
+
+    @classmethod
     @params_is_valid
     def create(cls, username, password, role, fingerprint):
         db = get_db()
