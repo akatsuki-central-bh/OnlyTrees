@@ -43,16 +43,19 @@
                     <tr>
                         <th scope="col">E-mail</th>
                         <th scope="col">Perfil</th>
-                        <th scope="col">Alguma Coisa</th>
+                        <th scope="col">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
 
                     <tr>
-                        <td>{{ user['email'] }}</td>
-                        <td>{{ user['perfil'] }}</td>
-                        <td>{{ user['alguma-coisa'] }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm" href=""><i class="bi bi-pencil-fill"></i></a>
+                            <a class="btn btn-outline-secondary btn-sm" href=""><i class="bi bi-trash-fill"></i></a>
+                        </td>
                     </tr>
 
                     {% endfor %}
