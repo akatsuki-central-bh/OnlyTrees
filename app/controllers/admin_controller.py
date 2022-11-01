@@ -13,7 +13,7 @@ from .auth_controller import login_required
 def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user.role == 0:
+        if g.user.role == 1:
             flash('você não tem permissão para acessar essa página')
             return redirect(url_for('index'))
 
