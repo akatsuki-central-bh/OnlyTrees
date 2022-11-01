@@ -7,6 +7,7 @@ class User():
         self.id = id
         self.username = username
         self.password = password
+        self.role = role
 
     def params_is_valid(function):
         def wrapper(ctx, username, password, role, fingerprint):
