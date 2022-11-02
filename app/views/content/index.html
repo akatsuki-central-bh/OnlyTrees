@@ -12,10 +12,9 @@
     <article class="content">
       <header>
         <div>
-          <h1>{{ content.title }}</h1>
+          <a href="/{{ content.id }}"><h1>{{ content.title }}</h1></a>
         </div>
       </header>
-      <p class="body">{{ content.body }}</p>
     </article>
     {% if not loop.last %}
       <hr>
