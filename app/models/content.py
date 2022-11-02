@@ -24,8 +24,8 @@ class Content():
     @classmethod
     def find(cls, id):
         content_data = get_db().execute(
-            'SELECT id, title, body'
-            ' FROM contents JOIN user u ON p.author_id = u.id'
+            'SELECT *'
+            ' FROM contents'
             ' WHERE id = ?',
             (id,)
         ).fetchone()

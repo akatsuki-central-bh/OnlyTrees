@@ -12,7 +12,13 @@ bp = Blueprint('content', __name__)
 @bp.route('/')
 def index():
     contents = Content.all()
-    return render_template('content/index.html', contents=contents)
+
+    allowed_contents = filter(
+        lambda content: (content.access_level <= g.user.role),
+        contents
+    )
+
+    return render_template('content/index.html', contents=allowed_contents)
 
 @bp.route('/create', methods=['GET'])
 @login_required
@@ -33,6 +39,19 @@ def create():
 
     return redirect(url_for('content.index'))
 
+@bp.route('/<int:id>', methods=['GET'])
+def show(id):
+    content = Content.find(id)
+
+    if not content:
+        flash('Conteúdo não encontrado')
+        return redirect(url_for('content.index'))
+
+    if content.access_level > g.user.role:
+        flash('Você não tem permissão para ver o conteúdo')
+        return redirect(url_for('content.index'))
+
+    return render_template('content/show.html', content=content)
 
 @bp.route('/<int:id>/edit', methods=['GET'])
 def edit(id):
