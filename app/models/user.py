@@ -7,6 +7,7 @@ class User():
         self.id = id
         self.username = username
         self.password = password
+        self.role = role
 
     def params_is_valid(function):
         def wrapper(ctx, username, password, role, fingerprint):
@@ -34,6 +35,19 @@ class User():
             password=user_data['password'],
             role=user_data['role']
         )
+
+    @classmethod
+    def all(cls):
+        db = get_db()
+
+        users = db.execute('SELECT * FROM users').fetchall()
+
+        return map(lambda result: User(
+            id=result['id'],
+            username=result['username'],
+            password=result['password'],
+            role=result['role']
+        ), users)
 
     @classmethod
     @params_is_valid

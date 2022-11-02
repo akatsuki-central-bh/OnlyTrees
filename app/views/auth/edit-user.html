@@ -4,19 +4,20 @@
 
 <div class="container">
 
-  <div class="row">
-    <div class="col-6">
-        <label for="" class="form-label">E-mail</label>
-        <input type="email" name="email" id="email" class="form-control my-2">
-        <button type="button" class="btn btn-primary w-100 mb-2">Cadastrar</button>
-    </div>
-    <div class="col-6">
-        <select name="perfil" id="perfil">
-            <!-- verificar existencia do perfil do user e deixar ele como uma option select -->
-            {% for perfil in perfis %}
-            <option value="{{ perfil['id'] }}">{{ perfil['nome'] }}</option>
-            {% endfor %}
-        </select>
+    <div class="row">
+        <div class="col-6">
+            <label for="" class="form-label">E-mail</label>
+            <input type="email" name="email" id="email" class="form-control my-2">
+            <button type="button" class="btn btn-primary w-100 mb-2">Cadastrar</button>
+        </div>
+        <div class="col-6">
+            <select name="perfil" id="perfil">
+                <option value="1">Administrador</option>
+                <option value="2">Público</option>
+                <option value="3">Diretores de divisões</option>
+                <option value="4">Ministro do meio ambiente</option>
+            </select>
+        </div>
     </div>
 
 </div>

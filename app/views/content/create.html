@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}New Post{% endblock %}</h1>
+<h1>{% block title %}New Post{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+<form method="post">
     <label for="title">Title</label>
     <input name="title" id="title" value="{{ request.form['title'] }}" required>
     <label for="body">Body</label>
@@ -13,12 +13,12 @@
 
     <label for="access_level">Nível de acesso</label>
     <select name="access_level" id="access_level">
-      <option value="0">Administrador</option>
-      <option value="1">Público</option>
-      <option value="2">Diretores de divisões</option>
-      <option value="3">Ministro do meio ambiente</option>
+        <option value="1">Administrador</option>
+        <option value="2">Público</option>
+        <option value="3">Diretores de divisões</option>
+        <option value="4">Ministro do meio ambiente</option>
     </select>
 
     <input type="submit" value="Save">
-  </form>
+</form>
 {% endblock %}
