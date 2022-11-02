@@ -132,3 +132,30 @@ class User():
 
     def compare_password(self, password):
         return check_password_hash(self.password, password)
+
+    @classmethod
+    def admin_user_update(cls, role, userid, username = ""):
+        db = get_db()
+
+        try :
+
+            if (username != ""):
+                db.execute(
+                    'UPDATE users SET username = ?, role = ? WHERE id = ?',
+                    (username, role, userid)
+                )
+
+                db.commit()
+
+                return True
+
+            db.execute(
+                'UPDATE users SET role = ? WHERE id = ?',
+                (role, userid)
+            )
+
+            db.commit()
+
+            return True
+        except:
+            return False
