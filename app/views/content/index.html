@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}contents{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('content.create') }}">New</a>
-  {% endif %}
-{% endblock %}
+{% block title %}Listagem de conteúdo{% endblock %}
 
+{% if g.user %}
+  <a class="action" href="{{ url_for('content.create') }}">New</a>
+{% endif %}
 {% block content %}
   {% for content in contents %}
     <article class="content">

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/icons/bootstrap-icons.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <title>{% block title %}{% endblock %} - Flask</title>
+  <title>{% block title %}{% endblock %} - OnlyTrees</title>
 </head>
 
 <body>
@@ -17,7 +17,19 @@
     <div class="row justify-content-center">
       <div class="col-7 align-content-center">
         <header>
-          {% block header %}{% endblock %}
+          {% block header %}
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+              <a href="{{ url_for('content.index') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-4">Only Trees</span>
+              </a>
+
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a href="{{ url_for('content.index') }}" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="{{ url_for('admin.new_user') }}" class="nav-link">Invites</a></li>
+              </ul>
+            </header>
+          {% endblock %}
         </header>
       </div>
     </div>
@@ -26,7 +38,9 @@
     {% endfor %}
     <div class="row">
       <div class="col-12">
-        {% block content %}{% endblock %}
+        {% block content %}
+
+        {% endblock %}
       </div>
     </div>
   </section>
