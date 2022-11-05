@@ -6,16 +6,31 @@
   <a class="action" href="{{ url_for('content.create') }}">New</a>
 {% endif %}
 {% block content %}
-  {% for content in contents %}
-    <article class="content">
-      <header>
-        <div>
-          <a href="/{{ content.id }}"><h1>{{ content.title }}</h1></a>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+
+        {% for content in contents %}
+        <div class="row">
+          <div class="col-12">
+            <article class="content">
+              <header>
+                <div>
+                  <a href="/{{ content.id }}"><h1>{{ content.title }}</h1></a>
+                </div>
+              </header>
+            </article>
+          </div>
         </div>
-      </header>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+        {% if not loop.last %}
+          <hr>
+        {% endif %}
+
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

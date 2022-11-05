@@ -3,8 +3,15 @@
 {% block title %}{{ content.title }}{% endblock %}
 
 {% block content %}
-    <article class="content">
-        <h1>{{ content.title }}</h1>
-        <p class="body">{{ content.body }}</p>
-    </article>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <article class="content">
+                <h1>{{ content.title }}</h1>
+                <p class="body">{{ content.body }}</p>
+            </article>
+        </div>
+    </div>
+</div>
 {% endblock %}

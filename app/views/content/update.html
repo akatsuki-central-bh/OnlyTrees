@@ -2,16 +2,45 @@
 {% block title %}Editando conteúdo{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="title">Title</label>
-    <input name="title" id="title"
-      value="{{ request.form['title'] or post['title'] }}" required>
-    <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['body'] or post['body'] }}</textarea>
-    <input type="submit" value="Save">
-  </form>
-  <hr>
-  <form action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
-    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
-  </form>
+<div class="container">
+  <div class="row">
+      <div class="col-12">
+
+          <form action="" method="post">
+
+              <div class="row">
+                  <div class="col-6">
+                      <label for="" class="form-label">Título</label>
+                      <input type="text" name="title" id="title" class="form-control" value="{{ contents.title }}">
+                  </div>
+
+                  <div class="col-6">
+                      <label for="" class="form-label">Nível de acesso</label>
+                      <select name="access_level" id="access_level" class="form-select">
+                          <option value="1">Administrador</option>
+                          <option value="2">Público</option>
+                          <option value="3">Diretores de divisões</option>
+                          <option value="4">Ministro do meio ambiente</option>
+                      </select>
+                  </div>
+              </div>
+
+              <div class="row my-2">
+                  <div class="col-12">
+                      <label for="" class="form-label">Conteúdo</label>
+                      <textarea name="body" id="body" cols="30" rows="10" class="form-control" value="{{ contents.body }}"></textarea>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-12">
+                      <button type="submit" class="btn btn-primary w-100">Enviar</button>
+                  </div>
+              </div>
+
+          </form>
+
+      </div>
+  </div>
+</div>
 {% endblock %}
