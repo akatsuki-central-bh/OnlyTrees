@@ -13,8 +13,12 @@ bp = Blueprint('content', __name__)
 def index():
     contents = Content.all()
 
+    role = 1
+    if not g.user is None:
+        role = g.user.role
+
     allowed_contents = filter(
-        lambda content: (content.access_level <= g.user.role),
+        lambda content: (content.access_level <= role),
         contents
     )
 
@@ -47,7 +51,11 @@ def show(id):
         flash('Conteúdo não encontrado')
         return redirect(url_for('content.index'))
 
-    if content.access_level > g.user.role:
+    role = 1
+    if not g.user is None:
+        role = g.user.role
+
+    if content.access_level > role:
         flash('Você não tem permissão para ver o conteúdo')
         return redirect(url_for('content.index'))
 

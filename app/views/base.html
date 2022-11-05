@@ -26,7 +26,15 @@
 
               <ul class="nav nav-pills">
                 <li class="nav-item"><a href="{{ url_for('content.index') }}" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="{{ url_for('admin.new_user') }}" class="nav-link">Invites</a></li>
+                {% if g.user %}
+                  {% if g.user.role == 1 %}
+                    <li class="nav-item"><a href="{{ url_for('admin.new_user') }}" class="nav-link">Administrativa</a></li>
+                  {% endif %}
+                  <li class="nav-item"><a href="{{ url_for('content.new') }}" class="nav-link">Escrever publicação</a></li>
+                  <li class="nav-item"><a href="{{ url_for('auth.delete_session') }}" class="nav-link">Logout</a></li>
+                {% else %}
+                  <li class="nav-item"><a href="{{ url_for('auth.new_session') }}" class="nav-link">Logar</a></li>
+                {% endif %}
               </ul>
             </header>
           {% endblock %}
@@ -34,7 +42,9 @@
       </div>
     </div>
     {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+      <div class="alert alert-primary" role="alert">
+        {{ message }}
+      </div>
     {% endfor %}
     <div class="row">
       <div class="col-12">
