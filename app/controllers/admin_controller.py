@@ -14,6 +14,9 @@ from .auth_controller import login_required
 def admin_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
+        if g.user is None:
+            flash('você não está logado')
+            return redirect(url_for('index'))
         if g.user.role != 1:
             flash('você não tem permissão para acessar essa página')
             return redirect(url_for('index'))
@@ -34,9 +37,8 @@ def create_user():
     username = request.form['username']
     role = request.form['perfil']
     password = "admin123"
-    flash(username)
     User.create(username, password, role, None)
-    return render_template('admin/invite.html')
+    return redirect(url_for('admin.new_user'))
 
 @admin_required
 @bp.route('/<int:id>/edit', methods=['GET'])
