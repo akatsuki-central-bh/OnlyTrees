@@ -114,6 +114,7 @@ def login_with_fingerprint(fingerprint):
 @bp.route('/logout')
 def delete_session():
     session.clear()
+    flash('deslogado com sucesso')
     return redirect(url_for('index'))
 
 @bp.before_app_request
