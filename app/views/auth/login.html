@@ -33,7 +33,9 @@
           <button type="submit" class="btn btn-primary w-100">Logar</button>
         </div>
         <div class="col-12 text-center mt-2">
-          <a href="{{ url_for('auth.new_register') }}" style="text-decoration: none;">Registrar</a>
+          {% if is_permitted_register %}
+            <a href="{{ url_for('auth.register') }}">Registrar</a>
+          {% endif %}
         </div>
       </div>
     </div>

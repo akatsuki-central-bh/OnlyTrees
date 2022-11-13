@@ -159,3 +159,9 @@ class User():
             return True
         except:
             return False
+
+    @classmethod
+    def count_admins():
+        db = get_db()
+
+        return db.execute('SELECT COUNT(*) FROM users WHERE role = 1').fetchone()[0]

@@ -25,6 +25,10 @@ def login_required(view):
 
 @bp.route('/register', methods=['GET'])
 def new_register():
+    if User.count_admins() > 1:
+        flash('não é possível criar mais usuários')
+        return redirect(url_for('auth.new_session'))
+
     if g.user:
         return redirect(url_for('index'))
 
@@ -32,6 +36,10 @@ def new_register():
 
 @bp.route('/register', methods=['POST'])
 def create_register():
+    if User.count_admins() > 1:
+        flash('não é possível criar mais usuários')
+        return redirect(url_for('auth.new_session'))
+
     fingerprint = request.files['file']
 
     email = request.form['email']
@@ -83,7 +91,8 @@ def update_user():
 
 @bp.route('/login', methods=['GET'])
 def new_session():
-    return render_template('auth/login.html')
+    is_permitted_register = User.count_admins() < 1
+    return render_template('auth/login.html', is_permitted_register=is_permitted_register)
 
 @bp.route('/login', methods=['POST'])
 def create_session():
