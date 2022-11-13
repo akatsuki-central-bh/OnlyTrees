@@ -33,6 +33,11 @@ def create_register():
 
     username = request.form['username']
     password = request.form['password']
+    confirm_password = request.form['confirm_password']
+
+    if password != confirm_password:
+        flash('senhas não conferem')
+        return redirect(url_for('auth.new_register'))
 
     user = User.create(username, password, 1, fingerprint)
 
