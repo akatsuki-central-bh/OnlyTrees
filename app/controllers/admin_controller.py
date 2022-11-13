@@ -25,13 +25,13 @@ def admin_required(view):
 
     return wrapped_view
 
-@bp.route('/invite', methods=['GET'])
+@bp.route('/', methods=['GET'])
 @admin_required
 def new_user():
     users = User.all()
     return render_template('admin/invite.html', users=users)
 
-@bp.route('/invite', methods=['POST'])
+@bp.route('/', methods=['POST'])
 @admin_required
 def create_user():
     username = request.form['username']
