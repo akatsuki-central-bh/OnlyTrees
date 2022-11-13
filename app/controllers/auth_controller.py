@@ -122,8 +122,6 @@ def login_with_fingerprint(fingerprint):
     command = FingerPrint(f'app/temp/{filename}')
     id_user = command.call()
 
-    flash(f'best_score: {command.best_score}, image: {command.filename}')
-
     os.remove(f'app/temp/{filename}')
 
     return User.find(id_user)
