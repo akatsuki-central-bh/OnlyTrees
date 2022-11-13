@@ -11,6 +11,7 @@
                 <h1>{{ content.title }}</h1>
                 {% if g.user %}
                     <a href="{{ url_for('contents.edit', id=content.id) }}">Editar conteúdo</a>
+                    <a href="{{ url_for('contents.delete', id=content.id) }}">Apagar conteúdo</a>
                 {% endif %}
                 <p class="body">{{ content.body }}</p>
             </article>

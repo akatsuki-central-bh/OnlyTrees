@@ -86,9 +86,9 @@ class Content():
     def destroy(self):
         try:
             db = get_db()
-            db.execute(
-                'DELETE contents WHERE id = ?', (self.id,)
-            )
+            db.execute('DELETE FROM contents WHERE id = ?', (self.id,))
+
+            db.commit()
 
             return True
         except:

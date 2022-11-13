@@ -107,7 +107,7 @@ def update(id):
         return redirect(url_for('contents.index'))
 
 
-@bp.route('/<int:id>/delete', methods=['POST'])
+@bp.route('/<int:id>/delete', methods=['GET'])
 @login_required
 def delete(id):
     content = Content.find(id)
@@ -116,4 +116,9 @@ def delete(id):
         flash('Alteração inválida')
         return redirect(url_for('contents.index'))
 
-    content.destroy()
+    if content.destroy():
+        flash('Conteúdo excluído com sucesso')
+        return redirect(url_for('contents.index'))
+    else:
+        flash('Falha ao tentar excluir conteúdo')
+        return redirect(url_for('contents.index'))
