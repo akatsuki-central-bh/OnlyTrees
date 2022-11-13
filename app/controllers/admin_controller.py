@@ -34,10 +34,10 @@ def new_user():
 @bp.route('/', methods=['POST'])
 @admin_required
 def create_user():
-    username = request.form['username']
+    email = request.form['email']
     role = request.form['perfil']
     password = "admin123"
-    User.create(username, password, role, None)
+    User.create(email, password, role, None)
     return redirect(url_for('admin.new_user'))
 
 @admin_required
@@ -49,8 +49,8 @@ def edit_user(id):
 @admin_required
 @bp.route('/<int:id>/edit', methods=['POST'])
 def update_user(id):
-    username = request.form['username']
+    email = request.form['email']
     role = request.form['perfil']
     userid = id
-    User.admin_user_update(role=role, userid=userid, username=username)
+    User.admin_user_update(role=role, userid=userid, email=email)
     return redirect(url_for('admin.new_user'))

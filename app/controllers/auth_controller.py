@@ -34,7 +34,7 @@ def new_register():
 def create_register():
     fingerprint = request.files['file']
 
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
 
@@ -42,7 +42,7 @@ def create_register():
         flash('senhas não conferem')
         return redirect(url_for('auth.new_register'))
 
-    user = User.create(username, password, 1, fingerprint)
+    user = User.create(email, password, 1, fingerprint)
 
     if not user:
         flash('não foi possível cadastrar o usuário')
@@ -87,14 +87,14 @@ def new_session():
 
 @bp.route('/login', methods=['POST'])
 def create_session():
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
     fingerprint = request.files['file']
 
     user = None
 
     if not request.files.get('file', None):
-        user = User.login(username, password)
+        user = User.login(email, password)
     else:
         user = login_with_fingerprint(fingerprint)
 

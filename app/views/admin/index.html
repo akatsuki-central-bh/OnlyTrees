@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="" class="form-label">E-mail</label>
-                        <input type="email" name="username" id="users" class="form-control">
+                        <input type="email" name="email" id="users" class="form-control">
                     </div>
 
                     <div class="col">
@@ -52,7 +52,7 @@
                     {% for user in users %}
 
                     <tr>
-                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.role }}</td>
                         <td>
                             <a class="btn btn-outline-primary btn-sm"
