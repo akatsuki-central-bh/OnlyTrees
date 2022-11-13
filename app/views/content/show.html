@@ -9,6 +9,7 @@
         <div class="col-12">
             <article class="content">
                 <h1>{{ content.title }}</h1>
+                <a href="{{ url_for('content.edit', id=content.id) }}">Editar conteúdo</a>
                 <p class="body">{{ content.body }}</p>
             </article>
         </div>
