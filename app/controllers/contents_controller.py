@@ -13,14 +13,18 @@ bp = Blueprint('contents', __name__)
 def index():
     contents = Content.all()
 
+    role = None
+    if g.user:
+        role = g.user.role
+
     if g.user:
         allowed_contents = filter(
-            lambda content: (content.access_level <= g.user.role),
+            lambda content: ( content.is_permitted(role) ),
             contents
         )
     else:
         allowed_contents = filter(
-            lambda content: (content.access_level <= 1),
+            lambda content: (content.access_level == 2),
             contents
         )
 
@@ -53,20 +57,29 @@ def show(id):
         flash('Conteúdo não encontrado')
         return redirect(url_for('contents.index'))
 
+    role = None
     if g.user:
-        if content.access_level > g.user.role:
-            flash('Você não tem permissão para ver o conteúdo')
-            return redirect(url_for('contents.index'))
-    else:
-        if content.access_level > 1:
-            flash('Você não tem permissão para ver o conteúdo')
-            return redirect(url_for('contents.index'))
+        role = g.user.role
+
+    if not (content.is_permitted(role)):
+        flash('Você não tem permissão para ver o conteúdo')
+        return redirect(url_for('contents.index'))
 
     return render_template('contents/show.html', content=content)
 
 @bp.route('/<int:id>/edit', methods=['GET'])
+@login_required
 def edit(id):
     content = Content.find(id)
+
+    role = None
+    if g.user:
+        role = g.user.role
+
+    if not (content.is_permitted(role)):
+        flash('Você não tem permissão para ver o conteúdo')
+        return redirect(url_for('contents.index'))
+
     return render_template('contents/edit.html', content=content)
 
 @bp.route('/<int:id>/edit', methods=['POST'])

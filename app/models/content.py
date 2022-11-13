@@ -93,3 +93,15 @@ class Content():
             return True
         except:
             return False
+
+    def is_permitted(self, role):
+        if role is None and self.access_level == 2:
+            return True
+
+        if role == 1:
+            return True
+
+        if self.access_level <= role:
+            return True
+
+        return False
