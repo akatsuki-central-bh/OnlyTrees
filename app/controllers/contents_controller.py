@@ -7,7 +7,7 @@ from .auth_controller import login_required
 from app.database.database import get_db
 from app.models.content import Content
 
-bp = Blueprint('content', __name__)
+bp = Blueprint('contents', __name__)
 
 @bp.route('/')
 def index():
@@ -24,12 +24,12 @@ def index():
             contents
         )
 
-    return render_template('content/index.html', contents=allowed_contents)
+    return render_template('contents/index.html', contents=allowed_contents)
 
 @bp.route('/create', methods=['GET'])
 @login_required
 def new():
-    return render_template('content/create.html')
+    return render_template('contents/create.html')
 
 @bp.route('/create', methods=['POST'])
 @login_required
@@ -41,9 +41,9 @@ def create():
     content = Content.create(title, body, access_level)
     if not content:
         flash('Falha ao tentar publicar conteúdo')
-        return render_template('content/create.html')
+        return render_template('contents/create.html')
 
-    return redirect(url_for('content.index'))
+    return redirect(url_for('contents.index'))
 
 @bp.route('/<int:id>', methods=['GET'])
 def show(id):
@@ -51,25 +51,25 @@ def show(id):
 
     if not content:
         flash('Conteúdo não encontrado')
-        return redirect(url_for('content.index'))
+        return redirect(url_for('contents.index'))
 
     if g.user:
         if content.access_level > g.user.role:
             flash('Você não tem permissão para ver o conteúdo')
-            return redirect(url_for('content.index'))
+            return redirect(url_for('contents.index'))
     else:
         if content.access_level > 1:
             flash('Você não tem permissão para ver o conteúdo')
-            return redirect(url_for('content.index'))
+            return redirect(url_for('contents.index'))
 
-    return render_template('content/show.html', content=content)
+    return render_template('contents/show.html', content=content)
 
 @bp.route('/<int:id>/edit', methods=['GET'])
 def edit(id):
     content = Content.find(id)
-    return render_template('content/update.html', content=content)
+    return render_template('contents/edit.html', content=content)
 
-@bp.route('/<int:id>/update', methods=['POST'])
+@bp.route('/<int:id>/edit', methods=['POST'])
 @login_required
 def update(id):
     title = request.form['title']
@@ -85,9 +85,13 @@ def update(id):
         flash(error)
     else:
         content = Content.find(id)
-        content.update(title, body, access_level)
+        content = content.update(title, body, access_level)
 
-        return redirect(url_for('content.index'))
+        if content is False:
+            flash('Falha ao tentar editar conteúdo')
+            return redirect(url_for('contents.edit', id=id))
+
+        return redirect(url_for('contents.index'))
 
 
 @bp.route('/<int:id>/delete', methods=['POST'])
@@ -97,6 +101,6 @@ def delete(id):
 
     if not content:
         flash('Alteração inválida')
-        return redirect(url_for('content.index'))
+        return redirect(url_for('contents.index'))
 
     content.destroy()

@@ -73,6 +73,8 @@ class Content():
                 (title, body, access_level, self.id)
             )
 
+            db.commit()
+
             self.title = title
             self.body = body
             self.access_level = access_level
