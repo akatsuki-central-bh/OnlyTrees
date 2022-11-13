@@ -45,7 +45,7 @@ def create_register():
     user = User.create(username, password, 1, fingerprint)
 
     if not user:
-        flash('usuário já cadastrado')
+        flash('não foi possível cadastrar o usuário')
         return render_template('auth/register.html')
 
     flash('usuário criado com sucesso')
