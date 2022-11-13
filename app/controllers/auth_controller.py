@@ -25,6 +25,9 @@ def login_required(view):
 
 @bp.route('/register', methods=['GET'])
 def new_register():
+    if g.user:
+        return redirect(url_for('index'))
+
     return render_template('auth/register.html')
 
 @bp.route('/register', methods=['POST'])
