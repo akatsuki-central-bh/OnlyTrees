@@ -123,13 +123,6 @@ class User():
             role=user_data['role']
         )
 
-    def exists_user():
-        db = get_db()
-        user_data = db.execute(
-            'SELECT * FROM users limit 1').fetchone()
-
-        return not user_data is None
-
     def compare_password(self, password):
         return check_password_hash(self.password, password)
 
