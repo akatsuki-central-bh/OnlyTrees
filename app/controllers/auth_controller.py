@@ -25,19 +25,35 @@ def login_required(view):
 
 @bp.route('/register', methods=['GET'])
 def new_register():
+    if User.count_admins() > 1:
+        flash('não é possível criar mais usuários')
+        return redirect(url_for('auth.new_session'))
+
+    if g.user:
+        return redirect(url_for('index'))
+
     return render_template('auth/register.html')
 
 @bp.route('/register', methods=['POST'])
 def create_register():
+    if User.count_admins() > 1:
+        flash('não é possível criar mais usuários')
+        return redirect(url_for('auth.new_session'))
+
     fingerprint = request.files['file']
 
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
+    confirm_password = request.form['confirm_password']
 
-    user = User.create(username, password, 1, fingerprint)
+    if password != confirm_password:
+        flash('senhas não conferem')
+        return redirect(url_for('auth.new_register'))
+
+    user = User.create(email, password, 1, fingerprint)
 
     if not user:
-        flash('usuário já cadastrado')
+        flash('não foi possível cadastrar o usuário')
         return render_template('auth/register.html')
 
     flash('usuário criado com sucesso')
@@ -75,18 +91,19 @@ def update_user():
 
 @bp.route('/login', methods=['GET'])
 def new_session():
-    return render_template('auth/login.html')
+    is_permitted_register = User.count_admins() < 1
+    return render_template('auth/login.html', is_permitted_register=is_permitted_register)
 
 @bp.route('/login', methods=['POST'])
 def create_session():
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
     fingerprint = request.files['file']
 
     user = None
 
     if not request.files.get('file', None):
-        user = User.login(username, password)
+        user = User.login(email, password)
     else:
         user = login_with_fingerprint(fingerprint)
 
@@ -104,8 +121,6 @@ def login_with_fingerprint(fingerprint):
 
     command = FingerPrint(f'app/temp/{filename}')
     id_user = command.call()
-
-    flash(f'best_score: {command.best_score}, image: {command.filename}')
 
     os.remove(f'app/temp/{filename}')
 

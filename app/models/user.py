@@ -3,22 +3,22 @@ from app.database.database import get_db
 from werkzeug.security import check_password_hash, generate_password_hash
 
 class User():
-    def __init__(self, username, password, role, id = None):
+    def __init__(self, email, password, role, id = None):
         self.id = id
-        self.username = username
+        self.email = email
         self.password = password
         self.role = role
 
     def params_is_valid(function):
-        def wrapper(ctx, username, password, role, fingerprint):
-            if not username:
-                raise Exception('Username is required.')
+        def wrapper(ctx, email, password, role, fingerprint):
+            if not email:
+                raise Exception('email is required.')
             elif not password:
                 raise Exception('Password is required.')
             elif not role:
                 raise Exception('Role is required.')
 
-            return function(ctx, username, password, role, fingerprint)
+            return function(ctx, email, password, role, fingerprint)
 
         return wrapper
 
@@ -31,7 +31,7 @@ class User():
 
         return User(
             id=user_data['id'],
-            username=user_data['username'],
+            email=user_data['email'],
             password=user_data['password'],
             role=user_data['role']
         )
@@ -44,21 +44,21 @@ class User():
 
         return map(lambda result: User(
             id=result['id'],
-            username=result['username'],
+            email=result['email'],
             password=result['password'],
             role=result['role']
         ), users)
 
     @classmethod
     @params_is_valid
-    def create(cls, username, password, role, fingerprint):
+    def create(cls, email, password, role, fingerprint):
         db = get_db()
         cursor = db.cursor()
 
         password = generate_password_hash(password)
 
         try:
-            cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, password, role,))
+            cursor.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", (email, password, role,))
 
             db.commit()
 
@@ -69,7 +69,7 @@ class User():
 
             return User(
                 id = cursor.lastrowid,
-                username = username,
+                email = email,
                 password = password,
                 role = role
             )
@@ -104,10 +104,10 @@ class User():
         pass
 
     @classmethod
-    def login(cls, username, password):
+    def login(cls, email, password):
         db = get_db()
         user_data = db.execute(
-            'SELECT * FROM users WHERE username = ?', (username,)
+            'SELECT * FROM users WHERE email = ?', (email,)
         ).fetchone()
 
         if user_data is None:
@@ -118,31 +118,24 @@ class User():
 
         return User(
             id=user_data['id'],
-            username=user_data['username'],
+            email=user_data['email'],
             password=user_data['password'],
             role=user_data['role']
         )
-
-    def exists_user():
-        db = get_db()
-        user_data = db.execute(
-            'SELECT * FROM users limit 1').fetchone()
-
-        return not user_data is None
 
     def compare_password(self, password):
         return check_password_hash(self.password, password)
 
     @classmethod
-    def admin_user_update(cls, role, userid, username = ""):
+    def admin_user_update(cls, role, userid, email = ""):
         db = get_db()
 
         try :
 
-            if (username != ""):
+            if (email != ""):
                 db.execute(
-                    'UPDATE users SET username = ?, role = ? WHERE id = ?',
-                    (username, role, userid)
+                    'UPDATE users SET email = ?, role = ? WHERE id = ?',
+                    (email, role, userid)
                 )
 
                 db.commit()
@@ -159,3 +152,9 @@ class User():
             return True
         except:
             return False
+
+    @classmethod
+    def count_admins(self):
+        db = get_db()
+
+        return db.execute('SELECT COUNT(*) FROM users WHERE role = 1').fetchone()[0]

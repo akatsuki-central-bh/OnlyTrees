@@ -73,6 +73,8 @@ class Content():
                 (title, body, access_level, self.id)
             )
 
+            db.commit()
+
             self.title = title
             self.body = body
             self.access_level = access_level
@@ -84,10 +86,22 @@ class Content():
     def destroy(self):
         try:
             db = get_db()
-            db.execute(
-                'DELETE contents WHERE id = ?', (self.id,)
-            )
+            db.execute('DELETE FROM contents WHERE id = ?', (self.id,))
+
+            db.commit()
 
             return True
         except:
             return False
+
+    def is_permitted(self, role):
+        if role is None and self.access_level == 2:
+            return True
+
+        if role == 1:
+            return True
+
+        if self.access_level <= role:
+            return True
+
+        return False

@@ -29,28 +29,28 @@ def admin_required(view):
 @admin_required
 def new_user():
     users = User.all()
-    return render_template('admin/invite.html', users=users)
+    return render_template('admin/index.html', users=users)
 
 @bp.route('/', methods=['POST'])
 @admin_required
 def create_user():
-    username = request.form['username']
+    email = request.form['email']
     role = request.form['perfil']
     password = "admin123"
-    User.create(username, password, role, None)
+    User.create(email, password, role, None)
     return redirect(url_for('admin.new_user'))
 
 @admin_required
 @bp.route('/<int:id>/edit', methods=['GET'])
 def edit_user(id):
     user = User.find(id)
-    return render_template('admin/edit-user.html', user=user)
+    return render_template('admin/edit.html', user=user)
 
 @admin_required
 @bp.route('/<int:id>/edit', methods=['POST'])
 def update_user(id):
-    username = request.form['username']
+    email = request.form['email']
     role = request.form['perfil']
     userid = id
-    User.admin_user_update(role=role, userid=userid, username=username)
+    User.admin_user_update(role=role, userid=userid, email=email)
     return redirect(url_for('admin.new_user'))

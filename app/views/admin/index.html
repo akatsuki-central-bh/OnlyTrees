@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="" class="form-label">E-mail</label>
-                        <input type="email" name="username" id="users" class="form-control">
+                        <input type="email" name="email" id="users" class="form-control">
                     </div>
 
                     <div class="col">
@@ -20,8 +20,8 @@
                         <select name="perfil" id="perfil" class="form-select">
                             <option value="" selected disabled>Selecione um perfil</option>
                             <option value="1">Administrador</option>
-                            <option value="2">Público</option>
-                            <option value="3">Diretores de divisões</option>
+                            <option value="2">Comum</option>
+                            <option value="3">Diretor de divisão</option>
                             <option value="4">Ministro do meio ambiente</option>
                         </select>
                     </div>
@@ -52,7 +52,7 @@
                     {% for user in users %}
 
                     <tr>
-                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.role }}</td>
                         <td>
                             <a class="btn btn-outline-primary btn-sm"
