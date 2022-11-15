@@ -8,12 +8,7 @@ class FingerPrint():
         self.input_image = cv2.imread(file)
 
         self.best_score = 0
-
         self.filename = None
-        self.image = None
-        self.keypoints_1 = None
-        self.keypoints_2 = None
-        self.match_points = None
 
     def call(self):
         file_names = glob.glob('app/database/images/user/fingerprints/*.BMP')
@@ -46,10 +41,6 @@ class FingerPrint():
                 if score > self.best_score:
                     self.best_score = score
                     self.filename = filename
-                    self.image = fingerprint_image
-                    self.keypoints_1 = keypoints_1
-                    self.keypoints_2 = keypoints_2
-                    self.match_points = match_points
             except Exception as e:
                 print(str(e))
 

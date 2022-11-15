@@ -120,6 +120,7 @@ def login_with_fingerprint(fingerprint):
     fingerprint.save(f'app/temp/{filename}')
 
     command = FingerPrint(f'app/temp/{filename}')
+
     id_user = command.call()
 
     os.remove(f'app/temp/{filename}')
