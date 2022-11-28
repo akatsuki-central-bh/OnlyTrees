@@ -31,6 +31,7 @@
                     <li class="nav-item"><a href="{{ url_for('admin.new_user') }}" class="nav-link">Administrativa</a></li>
                   {% endif %}
                   <li class="nav-item"><a href="{{ url_for('contents.new') }}" class="nav-link">Escrever publicação</a></li>
+                  <li class="nav-item"><a href="{{ url_for('auth.edit_user') }}" class="nav-link">Alterar cadastro</a></li>
                   <li class="nav-item"><a href="{{ url_for('auth.delete_session') }}" class="nav-link">Logout</a></li>
                 {% else %}
                   <li class="nav-item"><a href="{{ url_for('auth.new_session') }}" class="nav-link">Logar</a></li>
