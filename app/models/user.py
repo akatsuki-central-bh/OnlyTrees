@@ -81,6 +81,8 @@ class User():
     def update(self, password, role, fingerprint):
         db = get_db()
 
+        password = generate_password_hash(password)
+
         try:
             db.execute(
                 'UPDATE users set password = ?, role = ? WHERE id = ?',
@@ -93,7 +95,7 @@ class User():
 
             db.commit()
 
-            self.password = generate_password_hash(password)
+            self.password = password
             self.role = role
 
             return self
